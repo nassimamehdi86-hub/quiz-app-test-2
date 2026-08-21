@@ -1,0 +1,1066 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>التقويم التشخيصي | الثانية متوسطة</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg-deep:#041712;
+  --bg-mid:#0b2a20;
+  --panel:#0e3327;
+  --gold:#d4af6a;
+  --gold-bright:#f3d68a;
+  --ink:#eef4ef;
+  --ink-dim:#9fc2ac;
+  --ok:#5fbf8a;
+  --bad:#d9636b;
+  --border:rgba(212,175,106,.28);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;}
+body{
+  font-family:'Tajawal',sans-serif;
+  background:
+    radial-gradient(circle at 15% 10%, rgba(212,175,106,.10), transparent 40%),
+    radial-gradient(circle at 85% 85%, rgba(56,189,148,.20), transparent 45%),
+    linear-gradient(160deg,var(--bg-deep),var(--bg-mid) 55%,var(--bg-deep));
+  color:var(--ink);
+  min-height:100vh;
+  overflow-x:hidden;
+  position:relative;
+}
+body::before{
+  content:"";
+  position:fixed;inset:0;
+  pointer-events:none;
+  background-image:
+    radial-gradient(2px 2px at 20% 30%, rgba(255,255,255,.5), transparent),
+    radial-gradient(1.5px 1.5px at 70% 20%, rgba(255,255,255,.4), transparent),
+    radial-gradient(1.5px 1.5px at 40% 70%, rgba(255,255,255,.35), transparent),
+    radial-gradient(2px 2px at 90% 60%, rgba(255,255,255,.4), transparent),
+    radial-gradient(1px 1px at 55% 45%, rgba(255,255,255,.3), transparent),
+    radial-gradient(1.5px 1.5px at 10% 85%, rgba(255,255,255,.35), transparent);
+  opacity:.5;
+  z-index:0;
+}
+.geo{
+  position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.05;
+  background-image:
+    repeating-linear-gradient(45deg, var(--gold) 0 1px, transparent 1px 46px),
+    repeating-linear-gradient(-45deg, var(--gold) 0 1px, transparent 1px 46px);
+}
+.wrap{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:18px 16px 60px;}
+
+/* ---------- header ---------- */
+.top{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  margin-bottom:18px;
+}
+.brand{
+  display:flex;align-items:center;gap:10px;
+}
+.brand .mark{
+  width:38px;height:38px;border-radius:50%;
+  border:1.5px solid var(--gold);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--gold-bright);font-family:'Amiri',serif;font-weight:700;font-size:18px;
+  box-shadow:0 0 14px rgba(212,175,106,.35);
+}
+.brand h1{font-family:'Amiri',serif;font-size:1.05rem;color:var(--gold-bright);font-weight:700;}
+.brand span{display:block;font-size:.72rem;color:var(--ink-dim);margin-top:1px;}
+
+/* ---------- start screen ---------- */
+.screen{display:none;}
+.screen.active{display:block;animation:fade .5s ease;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+
+.start-card{
+  background:linear-gradient(180deg, rgba(14,51,39,.9), rgba(8,32,24,.9));
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:38px 26px;
+  text-align:center;
+  box-shadow:0 20px 60px rgba(0,0,0,.4);
+  position:relative;overflow:hidden;
+}
+.start-card::before{
+  content:"";position:absolute;top:-40%;left:50%;transform:translateX(-50%);
+  width:280px;height:280px;border-radius:50%;
+  background:radial-gradient(circle, rgba(212,175,106,.25), transparent 70%);
+  pointer-events:none;
+}
+.start-card h2{font-family:'Amiri',serif;font-size:1.5rem;color:var(--gold-bright);margin-bottom:6px;position:relative;}
+.start-card p{color:var(--ink-dim);font-size:.92rem;margin-bottom:22px;position:relative;line-height:1.9;}
+.start-instruction{
+  position:relative;
+  border:1.5px solid var(--gold);
+  border-radius:10px;
+  background:rgba(212,175,106,.08);
+  color:var(--gold-bright);
+  font-size:.85rem;
+  font-weight:700;
+  padding:10px 14px;
+  margin-bottom:16px;
+  line-height:1.8;
+}
+.meta-row{display:flex;justify-content:center;gap:18px;margin-bottom:26px;flex-wrap:wrap;position:relative;}
+.meta-chip{
+  border:1px solid var(--border);border-radius:999px;
+  padding:6px 16px;font-size:.78rem;color:var(--ink-dim);
+}
+.meta-chip b{color:var(--gold-bright);}
+input#nameInput{
+  width:100%;max-width:360px;
+  background:rgba(4,23,18,.6);
+  border:1.5px solid var(--border);
+  border-radius:12px;
+  padding:14px 16px;
+  color:var(--ink);
+  font-family:'Tajawal',sans-serif;
+  font-size:1rem;text-align:center;
+  outline:none;margin-bottom:16px;
+  transition:.25s;
+}
+input#nameInput:focus{border-color:var(--gold);box-shadow:0 0 0 4px rgba(212,175,106,.12);}
+
+.api-settings{
+  text-align:right;background:rgba(255,255,255,.04);border:1px solid var(--border);
+  border-radius:12px;padding:10px 16px;margin-bottom:18px;
+}
+.api-settings summary{cursor:pointer;font-weight:700;font-size:.85rem;color:var(--gold-bright);list-style:none;}
+.api-settings summary::-webkit-details-marker{display:none;}
+.api-settings p{font-size:.78rem;color:var(--ink-dim);line-height:1.8;margin:10px 0;}
+.api-settings p a{color:var(--gold-bright);}
+.api-key-row{display:flex;gap:8px;}
+.api-key-row input{
+  flex:1;padding:9px 12px;border-radius:8px;border:1.5px solid var(--border);
+  background:rgba(255,255,255,.05);color:var(--ink);font-size:.85rem;font-family:inherit;
+}
+.api-key-row input:focus{outline:none;border-color:var(--gold);}
+.api-key-status{font-size:.76rem;margin-top:6px;color:var(--ok);}
+.api-key-status.warn{color:var(--gold-bright);}
+.btn{
+  border:none;cursor:pointer;
+  font-family:'Tajawal',sans-serif;font-weight:700;
+  border-radius:12px;
+  transition:.2s;
+}
+.btn-gold{
+  background:linear-gradient(135deg,var(--gold-bright),var(--gold));
+  color:#231a06;
+  padding:14px 40px;font-size:1rem;
+  box-shadow:0 8px 24px rgba(212,175,106,.3);
+}
+.btn-gold:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(212,175,106,.4);}
+.btn-gold:disabled{opacity:.4;cursor:not-allowed;transform:none;}
+.err{color:var(--bad);font-size:.8rem;height:16px;margin-bottom:6px;}
+
+/* ---------- quiz layout ---------- */
+.progress-wrap{margin-bottom:16px;}
+.progress-labels{display:flex;justify-content:space-between;font-size:.8rem;color:var(--ink-dim);margin-bottom:6px;}
+.progress-labels b{color:var(--gold-bright);}
+.progress-bar{height:8px;border-radius:999px;background:rgba(255,255,255,.06);overflow:hidden;border:1px solid var(--border);}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold-bright));border-radius:999px;transition:width .4s ease;}
+
+.layout{display:grid;grid-template-columns:1fr;gap:16px;}
+@media(min-width:880px){.layout{grid-template-columns:1fr 1.15fr;align-items:start;}}
+
+.passage-panel{
+  background:linear-gradient(180deg, rgba(11,42,32,.92), rgba(6,24,18,.92));
+  border:1px solid var(--border);border-radius:16px;
+  padding:18px 18px 20px;
+  position:sticky;top:12px;
+  max-height:78vh;overflow:hidden;
+  display:flex;flex-direction:column;
+}
+.passage-head{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:10px;flex-shrink:0;
+}
+.passage-head h3{font-family:'Amiri',serif;color:var(--gold-bright);font-size:1rem;}
+.toggle-passage{
+  display:none;
+  background:transparent;border:1px solid var(--border);color:var(--gold-bright);
+  border-radius:8px;padding:6px 10px;font-size:.78rem;cursor:pointer;
+}
+@media(max-width:879px){
+  .toggle-passage{display:inline-block;}
+  .passage-panel{position:relative;top:0;max-height:none;}
+  .passage-body{max-height:0;overflow:hidden;transition:max-height .35s ease;}
+  .passage-body.open{max-height:2000px;}
+}
+.passage-body{overflow-y:auto;line-height:2.3;font-family:'Tajawal',sans-serif;font-weight:500;font-size:1.05rem;color:#f2f7f2;padding-left:4px;}
+.passage-body::-webkit-scrollbar{width:6px;}
+.passage-body::-webkit-scrollbar-thumb{background:var(--border);border-radius:6px;}
+.passage-body p{margin-bottom:18px;text-align:justify;letter-spacing:.01em;}
+.passage-body u{text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:3px;font-weight:900;color:inherit;}
+.passage-body h4{font-family:'Amiri',serif;color:var(--gold-bright);font-size:1.15rem;margin-bottom:12px;text-align:center;}
+.passage-source{color:var(--ink-dim);font-size:.72rem;margin-top:8px;border-top:1px dashed var(--border);padding-top:8px;}
+
+.question-panel{
+  background:linear-gradient(180deg, rgba(14,51,39,.92), rgba(8,32,24,.92));
+  border:1px solid var(--border);border-radius:16px;
+  padding:22px 20px;
+  min-height:340px;
+  display:flex;flex-direction:column;
+}
+.q-eyebrow{color:var(--ink-dim);font-size:.75rem;letter-spacing:.03em;margin-bottom:8px;}
+.q-eyebrow b{color:var(--gold-bright);}
+.q-text{font-size:1.08rem;line-height:1.85;margin-bottom:20px;font-weight:500;}
+.options{display:flex;flex-direction:column;gap:10px;flex:1;}
+.opt{
+  display:flex;align-items:center;gap:12px;
+  border:1.5px solid var(--border);
+  background:rgba(4,23,18,.4);
+  border-radius:12px;padding:13px 14px;
+  cursor:pointer;text-align:right;
+  font-family:'Tajawal',sans-serif;font-size:.95rem;color:var(--ink);
+  transition:.18s;
+}
+.opt:hover{border-color:var(--gold);background:rgba(212,175,106,.07);}
+.opt .num{
+  flex-shrink:0;width:28px;height:28px;border-radius:50%;
+  border:1.5px solid var(--gold);color:var(--gold-bright);
+  display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700;
+}
+.opt.selected{border-color:var(--gold);background:rgba(212,175,106,.12);}
+.opt.disabled{cursor:default;pointer-events:none;}
+
+.text-answer-wrap{flex:1;display:flex;flex-direction:column;justify-content:center;gap:10px;}
+input.text-answer-input{
+  width:100%;
+  background:rgba(4,23,18,.5);
+  border:1.5px solid var(--border);
+  border-radius:12px;
+  padding:16px 16px;
+  color:var(--ink);
+  font-family:'Tajawal',sans-serif;
+  font-size:1.05rem;text-align:center;
+  outline:none;
+  transition:.25s;
+}
+input.text-answer-input:focus{border-color:var(--gold);box-shadow:0 0 0 4px rgba(212,175,106,.12);}
+.text-answer-note{font-size:.78rem;color:var(--ink-dim);text-align:center;}
+
+.footer-row{
+  display:flex;justify-content:space-between;align-items:center;margin-top:18px;
+}
+.hint{font-size:.78rem;color:var(--ink-dim);}
+.btn-next{
+  background:linear-gradient(135deg,var(--gold-bright),var(--gold));
+  color:#231a06;padding:11px 26px;font-size:.92rem;border-radius:10px;
+  opacity:0;pointer-events:none;transition:.25s;
+}
+.btn-next.show{opacity:1;pointer-events:auto;}
+
+/* ---------- essay (writing task) screen ---------- */
+.essay-card{
+  background:linear-gradient(180deg, rgba(14,51,39,.92), rgba(8,32,24,.92));
+  border:1px solid var(--border);border-radius:16px;
+  padding:22px 20px;
+}
+.essay-instruction{
+  background:rgba(212,175,106,.08);border:1.5px solid var(--gold);border-radius:12px;
+  padding:14px 16px;margin:14px 0 18px;line-height:1.9;font-size:.98rem;color:var(--ink);
+}
+.essay-upload{
+  display:flex;flex-direction:column;align-items:center;gap:14px;
+  border:1.5px dashed var(--border);border-radius:14px;padding:22px 16px;margin-bottom:8px;
+}
+.essay-upload input[type=file]{display:none;}
+.essay-upload-label{
+  cursor:pointer;text-align:center;color:var(--gold-bright);font-weight:700;font-size:.95rem;
+  border:1.5px solid var(--gold);border-radius:12px;padding:14px 22px;transition:.2s;
+}
+.essay-upload-label:hover{background:rgba(212,175,106,.08);}
+.essay-preview{max-width:100%;max-height:320px;border-radius:10px;border:1px solid var(--border);}
+.essay-loading{display:flex;flex-direction:column;align-items:center;gap:10px;color:var(--ink-dim);font-size:.85rem;padding:14px 0;}
+.spinner{
+  width:34px;height:34px;border-radius:50%;
+  border:3.5px solid rgba(255,255,255,.15);border-top-color:var(--gold-bright);
+  animation:spin 0.8s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg);}}
+.essay-result{
+  position:relative;text-align:right;background:rgba(255,255,255,.05);
+  border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-top:16px;font-size:.85rem;line-height:1.9;
+}
+.essay-result b{color:var(--gold-bright);}
+.essay-result ul{margin:8px 0 0;padding-right:18px;}
+
+/* ---------- result screen ---------- */
+.result-hero{
+  text-align:center;background:linear-gradient(180deg, rgba(14,51,39,.92), rgba(8,32,24,.92));
+  border:1px solid var(--border);border-radius:18px;padding:34px 20px;margin-bottom:20px;
+  position:relative;overflow:hidden;
+}
+.result-hero::before{
+  content:"";position:absolute;top:-50%;left:50%;transform:translateX(-50%);
+  width:340px;height:340px;border-radius:50%;
+  background:radial-gradient(circle, rgba(212,175,106,.22), transparent 70%);
+}
+.score-ring{
+  width:150px;height:150px;border-radius:50%;margin:0 auto 16px;
+  display:flex;align-items:center;justify-content:center;flex-direction:column;
+  position:relative;
+  background:conic-gradient(var(--gold-bright) calc(var(--pct)*1%), rgba(255,255,255,.08) 0);
+}
+.score-ring::before{
+  content:"";position:absolute;inset:9px;border-radius:50%;
+  background:var(--bg-mid);
+}
+.score-ring .num{position:relative;font-size:1.9rem;font-weight:900;color:var(--gold-bright);}
+.score-ring .lbl{position:relative;font-size:.75rem;color:var(--ink-dim);}
+.result-hero h2{font-family:'Amiri',serif;font-size:1.3rem;color:var(--gold-bright);position:relative;}
+.result-hero p{color:var(--ink-dim);font-size:.88rem;margin-top:4px;position:relative;}
+
+.actions-row{display:flex;justify-content:center;gap:12px;margin-top:22px;flex-wrap:wrap;}
+.btn-outline{
+  background:transparent;border:1.5px solid var(--gold);color:var(--gold-bright);
+  padding:12px 26px;border-radius:10px;font-size:.9rem;
+}
+footer.credit{text-align:center;color:var(--ink-dim);font-size:.72rem;margin-top:36px;opacity:.7;}
+
+/* ---------- printable answer sheet ---------- */
+#screenSheet{background:transparent;}
+.sheet-toolbar{display:flex;justify-content:center;gap:12px;margin-bottom:18px;}
+.sheet-paper{
+  background:#fff;color:#111;
+  width:100%;max-width:800px;margin:0 auto;
+  padding:22px 22px 26px;
+  border:2px solid #1f5c45;border-radius:4px;
+  font-family:'Tajawal',sans-serif;
+}
+.sheet-head{border:2px solid #1f5c45;border-radius:4px;text-align:center;padding:8px 6px;margin-bottom:14px;}
+.sheet-head h1{font-size:1.05rem;color:#1f5c45;font-weight:900;}
+.sheet-head h2{font-size:.85rem;color:#333;font-weight:700;margin-top:2px;}
+.sheet-info{display:flex;justify-content:space-between;gap:16px;margin-bottom:10px;flex-wrap:wrap;}
+.sheet-info div{font-size:.92rem;font-weight:700;color:#111;}
+.sheet-info b{color:#1f5c45;}
+.sheet-note{font-size:.76rem;color:#444;background:#f2f7f0;border:1px solid #bcd9c8;border-radius:6px;padding:8px 10px;margin-bottom:14px;line-height:1.7;}
+.sheet-list{border:1px solid #1f5c45;border-radius:6px;overflow:hidden;}
+.sheet-item{border-bottom:1px solid #ddd;padding:8px 10px;}
+.sheet-item:last-child{border-bottom:none;}
+.sheet-item:nth-child(even){background:#f6faf7;}
+.sheet-q{font-weight:800;font-size:.86rem;color:#111;margin-bottom:4px;line-height:1.6;}
+.sheet-q span{display:inline-block;background:#1f5c45;color:#fff;border-radius:5px;padding:1px 8px;font-size:.78rem;margin-left:6px;}
+.sheet-a{display:flex;align-items:baseline;gap:6px;font-size:.85rem;}
+.sheet-a b{color:#1f5c45;flex-shrink:0;}
+.sheet-a-text{font-weight:700;color:#222;}
+.sheet-a-text.empty{color:#999;font-weight:400;font-style:italic;}
+.sheet-a-point{margin-right:auto;font-weight:900;border-radius:5px;padding:1px 10px;font-size:.8rem;}
+.sheet-a-point.ok{background:#e6f9ee;color:#1f9d55;}
+.sheet-a-point.bad{background:#fdecec;color:#d9636b;}
+.sheet-foot{display:flex;justify-content:space-between;align-items:center;margin-top:16px;padding-top:10px;border-top:1px dashed #999;}
+.sheet-grade{border:2px solid #1f5c45;border-radius:6px;padding:8px 22px;font-weight:800;font-size:.92rem;color:#1f5c45;}
+.sheet-credit{font-size:.7rem;color:#777;}
+@media print{
+  body *{visibility:hidden;}
+  #screenSheet, #screenSheet *{visibility:visible;}
+  #screenSheet{position:absolute;inset:0;background:#fff;padding:0;}
+  .sheet-toolbar{display:none;}
+  .sheet-paper{border:2px solid #1f5c45;max-width:100%;box-shadow:none;}
+}
+
+/* ---------- leaderboard ---------- */
+.lb-card{
+  background:linear-gradient(180deg, rgba(28,24,64,.92), rgba(20,17,45,.92));
+  border:1px solid var(--border);border-radius:18px;padding:24px 20px;margin-bottom:18px;
+}
+.lb-head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:6px;}
+.lb-head h2{font-family:'Amiri',serif;font-size:1.25rem;color:var(--gold-bright);}
+.lb-loading,.lb-empty{color:var(--ink-dim);font-size:.85rem;text-align:center;padding:24px 0;}
+.lb-table{width:100%;border-collapse:collapse;}
+.lb-table th{
+  font-size:.78rem;color:var(--gold-bright);border-bottom:1px solid var(--border);
+  padding:8px 6px;text-align:center;font-weight:700;
+}
+.lb-table td{
+  font-size:.88rem;padding:10px 6px;text-align:center;border-bottom:1px solid rgba(255,255,255,.05);
+}
+.lb-table td:nth-child(2){text-align:right;padding-right:10px;}
+.lb-table tr.lb-me td{background:rgba(212,175,106,.1);font-weight:700;color:var(--gold-bright);}
+.lb-table tr.rank-1 td{background:linear-gradient(90deg, rgba(255,215,0,.16), rgba(255,215,0,.04));border-bottom:1px solid rgba(255,215,0,.3);}
+.lb-table tr.rank-1 .lb-rank{color:#ffd700;font-size:1.15rem;font-weight:900;}
+.lb-table tr.rank-1 td:nth-child(2){color:#ffe27a;font-weight:900;}
+.lb-table tr.rank-2 td{background:linear-gradient(90deg, rgba(192,192,192,.14), rgba(192,192,192,.03));border-bottom:1px solid rgba(192,192,192,.25);}
+.lb-table tr.rank-2 .lb-rank{color:#c8c8d4;font-size:1.1rem;font-weight:900;}
+.lb-table tr.rank-2 td:nth-child(2){color:#dcdce4;font-weight:800;}
+.lb-table tr.rank-3 td{background:linear-gradient(90deg, rgba(205,127,50,.16), rgba(205,127,50,.04));border-bottom:1px solid rgba(205,127,50,.3);}
+.lb-table tr.rank-3 .lb-rank{color:#cd7f32;font-size:1.05rem;font-weight:900;}
+.lb-table tr.rank-3 td:nth-child(2){color:#e0a976;font-weight:800;}
+.lb-table tr.lb-me.rank-1 td,.lb-table tr.lb-me.rank-2 td,.lb-table tr.lb-me.rank-3 td{outline:1.5px solid var(--gold-bright);outline-offset:-1px;}
+
+/* ---------- leaderboard modal ---------- */
+.lb-modal-overlay{
+  display:none;position:fixed;inset:0;z-index:50;
+  background:rgba(6,5,18,.72);backdrop-filter:blur(3px);
+  align-items:center;justify-content:center;padding:18px;
+}
+.lb-modal-overlay.active{display:flex;animation:fade .3s ease;}
+.lb-modal{
+  width:100%;max-width:480px;max-height:85vh;overflow-y:auto;
+  background:linear-gradient(180deg, rgba(28,24,64,.97), rgba(20,17,45,.97));
+  border:1px solid var(--border);border-radius:18px;padding:22px 18px;
+  box-shadow:0 20px 60px rgba(0,0,0,.5);
+}
+.lb-modal-close{
+  position:absolute;top:10px;left:10px;
+  background:transparent;border:1px solid var(--border);color:var(--ink-dim);
+  border-radius:50%;width:30px;height:30px;font-size:1rem;cursor:pointer;line-height:1;
+}
+.lb-modal-close:hover{color:var(--gold-bright);border-color:var(--gold);}
+.lb-modal-inner{position:relative;}
+.start-lb-btn{
+  background:linear-gradient(135deg,var(--gold-bright),var(--gold));
+  border:none;color:#231a06;font-weight:900;
+  border-radius:14px;padding:16px 22px;font-size:1.05rem;cursor:pointer;
+  font-family:'Tajawal',sans-serif;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  width:100%;margin:0 0 18px;
+  box-shadow:0 8px 26px rgba(212,175,106,.4);
+  animation:lb-pulse 2.2s ease-in-out infinite;
+}
+.start-lb-btn:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(212,175,106,.5);}
+@keyframes lb-pulse{
+  0%,100%{box-shadow:0 8px 26px rgba(212,175,106,.4);}
+  50%{box-shadow:0 8px 34px rgba(212,175,106,.75);}
+}
+</style>
+</head>
+<body>
+<div class="geo"></div>
+<div class="wrap">
+  <div class="top">
+    <div class="brand">
+      <div class="mark">✦</div>
+      <div>
+        <h1>التقويم التشخيصي</h1>
+        <span>اللغة العربية — الثانية متوسطة</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- START -->
+  <div class="screen active" id="screenStart">
+    <div class="start-card">
+      <button class="start-lb-btn" onclick="openLeaderboardModal()">🏆 شاهد ترتيب التلاميذ الآن</button>
+      <h2>مرحبا بك أيها التلميذ المجتهد</h2>
+      <div class="start-instruction">اِقرإ النّصّ ثمّ أجب: (تُسلَّم آخر ورقة مع تحديد الإجابات بما يتوافق مع رقم السّؤال)</div>
+      <p>اقرأ نص "كن عصيّا على الهزيمة" جيدا، ثم أجب عن 29 سؤالا تقيس فهمك للنص والقواعد، وأخيرا أنجز نشاطا كتابيا يُصحَّح آليا (4 نقاط).<br>يبقى النص أمامك طوال الاختبار لمراجعته وقتما شئت.</p>
+      <div class="meta-row">
+        <div class="meta-chip">عدد الأسئلة: <b>29 + نشاط كتابي</b></div>
+        <div class="meta-chip">المستوى: <b>2 متوسط</b></div>
+      </div>
+      <input type="text" id="nameInput" placeholder="اكتب اسمك ولقبك هنا" maxlength="40">
+      <div class="err" id="nameErr"></div>
+      <button class="btn btn-gold" onclick="startQuiz()">ابدأ الاختبار</button>
+    </div>
+  </div>
+
+  <!-- QUIZ -->
+  <div class="screen" id="screenQuiz">
+    <div class="progress-wrap">
+      <div class="progress-labels"><span>السؤال <b id="qIndexLbl">1</b> من 29</span><span id="scoreLive"></span></div>
+      <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:2%"></div></div>
+    </div>
+    <div class="layout">
+      <div class="passage-panel">
+        <div class="passage-head">
+          <h3>📖 النص</h3>
+          <button class="toggle-passage" id="togglePassageBtn" onclick="togglePassage()">إخفاء / إظهار</button>
+        </div>
+        <div class="passage-body" id="passageBody"></div>
+      </div>
+      <div class="question-panel">
+        <div class="q-eyebrow">السؤال <b id="qNumTag">1</b> / 29</div>
+        <div class="q-text" id="qText"></div>
+        <div class="options" id="optionsWrap"></div>
+        <div class="footer-row">
+          <div class="hint" id="hintText">اختر إجابة</div>
+          <button class="btn btn-next" id="nextBtn" onclick="nextQuestion()">التالي ←</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ESSAY (writing task) -->
+  <div class="screen" id="screenEssay">
+    <div class="essay-card">
+      <div class="q-eyebrow">السؤال <b>30</b> — نشاط كتابي <b>(4 نقاط)</b></div>
+      <div class="essay-instruction" id="essayInstruction"></div>
+
+      <div class="essay-upload" id="essayUploadWrap">
+        <input type="file" id="essayFileInput" accept="image/*" capture="environment" onchange="onEssayFileSelected(event)">
+        <label for="essayFileInput" class="essay-upload-label" id="essayUploadLabel">
+          📷 صوّر ورقتك المكتوبة بخطّ يدك وأرفقها هنا
+        </label>
+        <img id="essayPreview" class="essay-preview" style="display:none;">
+      </div>
+
+      <div class="essay-loading" id="essayLoading" style="display:none;">
+        <div class="spinner"></div>
+        <div>جارٍ تصحيح التّعبير الكتابي آليّا، رجاء الانتظار...</div>
+      </div>
+
+      <div class="footer-row">
+        <div class="hint" id="essayHint">أرفق صورة واضحة لورقتك المكتوبة</div>
+        <div style="display:flex;gap:10px;">
+          <button class="btn btn-outline" onclick="skipEssay()">تخطّي (بدون إجابة)</button>
+          <button class="btn btn-gold" id="essaySubmitBtn" onclick="submitEssay()" disabled>تثبيت وإنهاء الاختبار ←</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESULT -->
+  <div class="screen" id="screenResult">
+    <div class="result-hero">
+      <div class="score-ring" id="scoreRing" style="--pct:0"><div class="num" id="scoreNum">0</div><div class="lbl">من <span id="scoreTotalLbl">33</span></div></div>
+      <h2>انتهى الاختبار</h2>
+      <p id="resultMsg"></p>
+      <div class="essay-result" id="essayResultBox" style="display:none;"></div>
+    </div>
+    <div class="actions-row">
+      <button class="btn btn-gold" onclick="openLeaderboardModal()">🏆 لوحة الترتيب</button>
+      <button class="btn btn-gold" onclick="openAnswerSheet()">📄 ورقة الإجابة للطّباعة</button>
+      <button class="btn btn-outline" onclick="restartQuiz()">إعادة الاختبار</button>
+    </div>
+  </div>
+
+  <!-- LEADERBOARD MODAL -->
+  <div class="lb-modal-overlay" id="leaderboardModalOverlay" onclick="if(event.target===this) closeLeaderboardModal()">
+    <div class="lb-modal">
+      <div class="lb-modal-inner">
+        <button class="lb-modal-close" onclick="closeLeaderboardModal()">✕</button>
+        <div class="lb-head"><h2>🏆 لوحة الترتيب</h2></div>
+        <div id="leaderboardBody"><div class="lb-loading">جارٍ التحميل...</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ANSWER SHEET -->
+  <div class="screen" id="screenSheet">
+    <div class="sheet-toolbar">
+      <button class="btn btn-gold" onclick="window.print()">🖨️ طباعة / تحميل PDF</button>
+      <button class="btn btn-outline" onclick="showScreen('screenResult')">← رجوع للنتيجة</button>
+    </div>
+    <div class="sheet-paper">
+      <div class="sheet-head">
+        <h1>التّقويم التّشخيصي لتلاميذ الثّانية متوسّطة</h1>
+        <h2>إعداد الأستاذ: محمّد أبو شاكر لعبودي</h2>
+      </div>
+      <div class="sheet-info">
+        <div><b>الاسم واللّقب:</b> <span id="sheetName"></span></div>
+        <div><b>القسم:</b> 2 م</div>
+      </div>
+      <div class="sheet-note">تُظهر هذه الورقة كلّ سؤال يليه إجابة التّلميذ كما كتبها أو اختارها أثناء الاختبار، والنّقطة النّهائيّة، لمقارنتها مباشرة مع الأستاذ في القسم.</div>
+      <div class="sheet-list" id="sheetList"></div>
+      <div class="sheet-foot">
+        <div class="sheet-grade">العلامة: <span id="sheetGrade"></span> / 33</div>
+        <div class="sheet-credit">صفحة إجابة مولّدة آليا حسب اختيارات التّلميذ</div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="credit">إعداد الأستاذ محمد أبو شاكر لعبودي — التعليم المتوسط</footer>
+</div>
+
+<script>
+/* ---------------- passage text ---------------- */
+const passageHTML = `
+<h4>كنْ عَصِيًّا على الهَزيمة</h4>
+<p>على قدر طمُوح المرء منّا يُخطَّط ما يتوافقُ ومرادَه في تحقيق النَّجاح، فلا يُعقَلُ أن يطمح المرء إلى تحقيق أهداف <u>كبيرة</u>؛ ونراه مع ذلك يعيش حياةً عاديّة، لا يستثمرُ وقتَه، ويكون ذهنُه <u>فارغا</u> بلا اهتمامات، مليئا بالتّفاهات، وحياته فوضى.</p>
+<p>(كما يجب على صاحب الطّموح الكبير أن يُهيِّئَ نفسه لمصاعب وتحدّيات توازي أهدافه وتطلّعاته)، وأهمّ هذه التّحديات النّقدُ الجائرُ، فعندما تواجه <u>هذا</u> النّوع من النّقد والتّشكيك والاستهزاء بقدراتك تجلّد وابتسم بهدوء، مادمت قرّرت أن تشقّ طريقك نحو المجد والعلياء.</p>
+<p>والسّبب في نقد البعض لك أنّ النّجاح يستفزّ النّفوس الضّعيفة، لأنّك قرّرت أن تختار الطّريق الصّعب، وأن تعلُوَ بنفسك، وتحلّق في عالم النّجاح، لذا إيّاك أنْ يستفزّك الهجوم، والحلّ هو أن تحرص على تجويد عملك، وأن تجعله أكمل ما يكون.</p>
+<div class="passage-source">كريم الشّانلي، ما لم يخبرني به عن الحياة (نصوص الاستماع، الصّفّ الثّامن، الأردن)</div>
+`;
+
+/* ---------------- questions data ----------------
+   correct: 0-based index (0=①..3=④) */
+const questions = [
+{q:'اقترح عنوانا آخر مناسبا للنّص:', o:['الطّموح','قوّة الإرادة','النّجاح الأكيد','الطّريق نحو المجد'], correct:0},
+{q:'استنبط صفتين من صفات المرء الطّموح كما وردت في النّص:', type:'text', mode:'lenient', answers:['يستثمر وقته','ينظم وقته','لا يهدر وقته','يستغل وقته','ذهنه مليء بالاهتمام','ذهنه مليء بالمهمات','حياته منظمة','حياته مرتبة','يهتم باهتماماته','لا يضيع وقته','يخطط لحياته','يخطط لأهدافه']},
+{q:'يجب على صاحب الطّموح الكبير أن:', o:['يتجنّب كلّ عقبة تعترض طريقه نحو النّجاح','يقلّل من حجم أهدافه ليتفادى التّحدّيات','يُهيّئ نفسه لمصاعب وتحدّيات توازي أهدافه وتطلّعاته','ينتظر زوال العقبات قبل أن يبدأ طريقه'], correct:2},
+{q:'معنى كلمة "الجائر" في قوله "النّقد الجائر" هو:', o:['الحازم','الدّقيق','الظّالم','القاسي'], correct:2},
+{q:'وظّف كلمة "الجائر" في جملة من إنشائك:', type:'text', mode:'sentence', keyword:'جائر', minWords:3},
+{q:'معنى كلمة "تجويد" في قوله "تحرص على تجويد عملك" هو:', o:['المبالغة','التّكرار','الإتقان','الإسراع'], correct:2},
+{q:'وظّف كلمة "تجويد" في جملة من إنشائك:', type:'text', mode:'sentence', keyword:'تجويد', minWords:3},
+{q:'إعراب كلمة "كبيرة" في قوله "أهداف كبيرة" هو:', o:['نعت مجرور وعلامة جرّه الكسرة الظّاهرة على آخره.','نعت منصوب وعلامة نصبه الفتحة الظّاهرة على آخره.','خبر مجرور وعلامة جرّه الكسرة الظّاهرة على آخره.','نعت مجرور وعلامة جرّه الياء لأنّه جمع مذكّر سالم.'], correct:0},
+{q:'إعراب كلمة "فارغا" في قوله "ويكون ذهنُه فارغا" هو:', o:['خبر مرفوع وعلامة رفعه الضّمّة الظّاهرة على آخره.','خبر منصوب وعلامة نصبه الفتحة الظّاهرة على آخره.','حال منصوب وعلامة نصبه الفتحة الظّاهرة على آخره.','نعت منصوب وعلامة نصبه الفتحة الظّاهرة على آخره.'], correct:1},
+{q:'إعراب كلمة "هذا" في قوله "هذا النّوع من النّقد" هو:', o:['ها: حرف تنبيه، ذا: اسم إشارة مبني في محلّ رفع مبتدأ.','ها: حرف تنبيه، ذا: اسم إشارة مبني في محلّ جرّ بحرف جرّ.','ها: حرف تنبيه، ذا: اسم إشارة مبني في محلّ نصب مفعول به.','ها: حرف تنبيه، ذا: اسم إشارة مبني في محلّ نصب حال.'], correct:2},
+{q:'استخرج من النّص اسما موصولا:', type:'text', answers:['ما']},
+{q:'استخرج من النّص اسم إشارة:', type:'text', answers:['هذا','هذه']},
+{q:'استخرج من النّص فعل أمر:', type:'text', answers:['ابتسم','كن']},
+{q:'استخرج من النّص فعلا مضارعا:', type:'text', answers:['يخطط','يطمح','يعيش','يستثمر','يكون','يهيئ','تواجه']},
+{q:'استخرج من النّص فعلا ماضيا:', type:'text', answers:['قررت']},
+{q:'استخرج من النّص جمع تكسير:', type:'text', answers:['مصاعب']},
+{q:'استخرج من النّص اسم فاعل:', type:'text', answers:['صاحب']},
+{q:'استخرج من النّص فعلا ناسخا:', type:'text', answers:['كان','يكون','مادمت','دمت']},
+{q:'استخرج من النّص ضميرا متّصلا:', type:'text', answers:['الكاف','كاف']},
+{q:'استخرج من النّص ضميرا منفصلا:', type:'text', answers:['هو']},
+{q:'حوّل العبارة الواردة بين قوسين في النّص إلى جمع المذكّر: "(كما يجب على صاحب الطّموح الكبير أن يُهيِّئَ نفسه لمصاعب وتحدّيات توازي أهدافه وتطلّعاته)"', o:['كما يجب على أصحاب الطّموح الكبير أن يهيّئ أنفسهم لمصاعب وتحدّيات توازي أهدافهم وتطلّعاتهم','كما يجب على أصحاب الطّموح الكبير أن يهيّئوا نفسه لمصاعب وتحدّيات توازي أهدافهم وتطلّعاتهم','كما يجب على أصحاب الطّموح الكبير أن يهيّئوا أنفسهم لمصاعب وتحدّيات توازي أهدافهم وتطلّعاتهم','كما يجب على أصحاب الطّموح الكبير أن يهيّئوا أنفسهم لمصاعب وتحدّيات توازي أهدافه وتطلّعاته'], correct:2},
+{q:'علّل كتابة التّاء في كلمة "كبيرة":', o:['مربوطة؛ لأنّها جاءت في آخر اسم مفرد مؤنّث.','مفتوحة؛ لأنّها اتّصلت بضمير.','مربوطة؛ لأنّها جاءت في آخر جمع تكسير على وزن مفاعل.','مفتوحة؛ لأنّها جاءت في آخر فعل ماضٍ.'], correct:0},
+{q:'علّل كتابة التّاء في كلمة "قرّرت":', o:['مربوطة؛ لأنّها جاءت في آخر اسم مفرد مؤنّث.','مفتوحة؛ لأنّها اتّصلت بالفعل (تاء الفاعل).','مربوطة؛ لأنّها جاءت في آخر جمع تكسير.','مفتوحة؛ لأنّها جاءت في آخر اسم ثلاثي ساكن الوسط.'], correct:1},
+{q:'علّل كتابة التّاء في كلمة "الضّعيفة":', o:['مفتوحة؛ لأنّها اتّصلت بالفعل.','مربوطة؛ لأنّها جاءت في آخر جمع تكسير على وزن مفاعل.','مفتوحة؛ لأنّها جاءت في آخر اسم ثلاثي ساكن الوسط.','مربوطة؛ لأنّها جاءت في آخر اسم مفرد مؤنّث (صفة).'], correct:3},
+{q:'نوع همزة كلمة "الاستهزاء" وسبب كتابتها:', o:['قطع؛ لأنّها جاءت في "أل" التّعريف.','وصل؛ لأنّها فعل أمر من فعل خماسي.','وصل؛ لأنّها جاءت في "أل" التّعريف.','قطع؛ لأنّها اسم مفرد ثلاثي.'], correct:2},
+{q:'نوع همزة كلمة "إيّاك" وسبب كتابتها:', o:['وصل؛ لأنّها ضمير في أوّل الكلمة مكسور.','قطع؛ لأنّها اسم مبنيّ مضموم فكُتبت فوق الألف.','قطع؛ لأنّها فعل أمر ثلاثي مبدوء بها.','قطع؛ لأنّها ضمير في أوّل الكلمة مكسور فكُتبت تحت الألف.'], correct:3},
+{q:'نوع همزة كلمة "الجائر" وسبب كتابتها:', o:['قطع؛ لأنّها جاءت في "أل" التّعريف.','وصل؛ لأنّها فعل أمر ثلاثي مبدوء بها.','وصل؛ لأنّها مصدر خماسي مبدوء بها.','وصل؛ لأنّها جاءت في "أل" التّعريف.'], correct:3},
+{q:'نوع المحسّن البديعي بين كلمتي "فارغا" و"مليئا" هو:', o:['طباق سلب','مقابلة','جناس ناقص','طباق إيجاب'], correct:3},
+{q:'نوع المحسّن البديعي في عبارة "بلا اهتمامات، مليئا بالتّفاهات" هو:', o:['جناس تامّ','طباق إيجاب','سجع','مقابلة'], correct:2},
+];
+
+/* ---------------- state ---------------- */
+let studentName = '';
+let current = 0;
+let score = 0;
+let answers = []; // {selected}
+const scoredTotal = questions.length;
+let quizStartTime = 0;
+let elapsedSeconds = 0;
+
+/* ---------------- essay (writing task) state ---------------- */
+const essayInstructionText = 'اكتب فقرة من عشرة أسطر تقريبا تعبّر فيها عن موقف واجهت فيه صعوبة أو نقدا أثّر في تحقيق حلم من أحلامك، وكيف تجاوزته بإصرارك وطموحك، محترما علامات الوقف، وموظّفا مكتسباتك المناسبة للموضوع.';
+const essayMaxPoints = 4;
+let essayImageData = null; // {base64, mimeType}
+let essayResult = null; // {criteria, total, feedback} or null if skipped/failed
+
+/* ---------------- إعداد رابط الدالة الوسيطة (Cloud Function) ---------------- */
+// عوّض هذا الرابط برابط الدالة الفعلي بعد النشر على Firebase، مثال:
+// https://us-central1-YOUR_PROJECT_ID.cloudfunctions.net/gradeEssay
+const GRADE_ESSAY_ENDPOINT = 'https://grade-essay.nassimamehdi86.workers.dev';
+
+/* ---------------- audio ---------------- */
+let actx;
+function ensureAudio(){ if(!actx){ actx = new (window.AudioContext||window.webkitAudioContext)(); } }
+function playTone(freqs, dur=0.14, type='sine', gap=0.02){
+  ensureAudio();
+  let t = actx.currentTime;
+  freqs.forEach((f,i)=>{
+    const o = actx.createOscillator();
+    const g = actx.createGain();
+    o.type = type; o.frequency.value = f;
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(0.18, t+0.01);
+    g.gain.exponentialRampToValueAtTime(0.0001, t+dur);
+    o.connect(g); g.connect(actx.destination);
+    o.start(t); o.stop(t+dur+0.02);
+    t += dur+gap;
+  });
+}
+function soundClick(){ playTone([440],0.06,'triangle'); }
+function soundFinish(){ playTone([392,523.25,659.25,783.99,987.77],0.13,'sine',0.015); }
+
+/* ---------------- flow ---------------- */
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function startQuiz(){
+  const val = document.getElementById('nameInput').value.trim();
+  if(!val){ document.getElementById('nameErr').textContent = 'رجاء أدخل اسمك ولقبك للمتابعة'; return; }
+  studentName = val;
+  quizStartTime = Date.now();
+  document.getElementById('passageBody').innerHTML = passageHTML;
+  document.getElementById('essayInstruction').textContent = essayInstructionText;
+  current = 0; score = 0; answers = [];
+  essayImageData = null; essayResult = null;
+  document.getElementById('essayPreview').style.display = 'none';
+  document.getElementById('essayUploadLabel').textContent = '📷 صوّر ورقتك المكتوبة بخطّ يدك وأرفقها هنا';
+  document.getElementById('essaySubmitBtn').disabled = true;
+  document.getElementById('essayFileInput').value = '';
+  document.getElementById('essayUploadWrap').style.display = 'flex';
+  document.getElementById('essayLoading').style.display = 'none';
+  const essayFooter = document.querySelector('#screenEssay .footer-row');
+  if(essayFooter) essayFooter.style.opacity = '1';
+  showScreen('screenQuiz');
+  renderQuestion();
+}
+
+function togglePassage(){
+  document.getElementById('passageBody').classList.toggle('open');
+}
+
+function renderQuestion(){
+  const q = questions[current];
+  document.getElementById('qIndexLbl').textContent = current+1;
+  document.getElementById('qNumTag').textContent = current+1;
+  document.getElementById('scoreLive').textContent = '';
+  document.getElementById('progressFill').style.width = Math.round(((current)/questions.length)*100+2) + '%';
+  document.getElementById('qText').textContent = q.q;
+  const wrap = document.getElementById('optionsWrap');
+  wrap.innerHTML = '';
+  currentSelection = null;
+  currentTextValue = '';
+
+  if(q.type === 'text'){
+    document.getElementById('hintText').textContent = 'اكتب إجابتك في الخانة';
+    const box = document.createElement('div');
+    box.className = 'text-answer-wrap';
+    box.innerHTML = `<input type="text" class="text-answer-input" id="textAnswerInput" placeholder="اكتب الإجابة هنا" autocomplete="off">
+      <div class="text-answer-note">${q.mode==='sentence' ? 'اكتب جملة من إنشائك توظّف فيها الكلمة بمعناها الصّحيح' : (q.mode==='lenient' ? 'أجب بأسلوبك الخاص، فالإجابة القريبة من المعنى تُحتسب صحيحة' : 'اكتب الكلمة كما وردت في النّص')}</div>`;
+    wrap.appendChild(box);
+    const input = document.getElementById('textAnswerInput');
+    input.addEventListener('input', ()=>{
+      currentTextValue = input.value;
+      if(currentTextValue.trim()){
+        document.getElementById('nextBtn').classList.add('show');
+        document.getElementById('hintText').textContent = 'اضغط "تثبيت والتّالي" لتأكيد الإجابة';
+      } else {
+        document.getElementById('nextBtn').classList.remove('show');
+        document.getElementById('hintText').textContent = 'اكتب إجابتك في الخانة';
+      }
+    });
+    input.addEventListener('keydown', (e)=>{ if(e.key==='Enter'){ e.preventDefault(); nextQuestion(); } });
+  } else {
+    document.getElementById('hintText').textContent = 'اختر إجابة واحدة';
+    const circles = ['①','②','③','④'];
+    q.o.forEach((opt, idx)=>{
+      const div = document.createElement('div');
+      div.className = 'opt';
+      div.innerHTML = `<span class="num">${circles[idx]}</span><span>${opt}</span>`;
+      div.onclick = () => selectOption(idx);
+      wrap.appendChild(div);
+    });
+  }
+  document.getElementById('nextBtn').classList.remove('show');
+  document.getElementById('nextBtn').textContent = current===questions.length-1 ? 'تثبيت والانتقال إلى النّشاط الكتابي ←' : 'تثبيت والتّالي ←';
+}
+
+let currentSelection = null;
+let currentTextValue = '';
+
+function normalizeArabic(s){
+  return (s||'')
+    .replace(/[\u064B-\u0652\u0670\u0640]/g,'')
+    .replace(/[إأآا]/g,'ا')
+    .replace(/ى/g,'ي')
+    .replace(/ة/g,'ه')
+    .replace(/[،,.\-]/g,' ')
+    .replace(/\s+/g,' ')
+    .trim();
+}
+
+function selectOption(idx){
+  currentSelection = idx;
+  const opts = document.querySelectorAll('#optionsWrap .opt');
+  opts.forEach((o,i)=>{
+    o.classList.toggle('selected', i===idx);
+  });
+  soundClick();
+  document.getElementById('nextBtn').classList.add('show');
+  document.getElementById('hintText').textContent = 'يمكنك تغيير اختيارك، ثمّ اضغط "تثبيت والتّالي"';
+}
+
+function nextQuestion(){
+  const q = questions[current];
+  if(q.type === 'text'){
+    if(!currentTextValue.trim()) return;
+    answers.push({text: currentTextValue});
+  } else {
+    if(currentSelection===null) return;
+    answers.push({selected: currentSelection});
+  }
+  if(current < questions.length-1){
+    current++;
+    renderQuestion();
+  } else {
+    showScreen('screenEssay');
+  }
+}
+
+function isAnswerCorrect(q, a){
+  if(!a) return false;
+  if(q.type === 'text'){
+    const norm = normalizeArabic(a.text);
+    if(!norm) return false;
+    if(q.mode === 'sentence'){
+      const hasKeyword = norm.includes(normalizeArabic(q.keyword));
+      const wordCount = norm.split(' ').filter(Boolean).length;
+      return hasKeyword && wordCount >= (q.minWords||3);
+    }
+    if(q.mode === 'lenient'){
+      return q.answers.some(acc => norm.includes(normalizeArabic(acc)));
+    }
+    return q.answers.some(acc => norm.split(' ').includes(normalizeArabic(acc)));
+  }
+  return a.selected === q.correct;
+}
+
+function finishQuiz(){
+  soundFinish();
+  elapsedSeconds = Math.max(1, Math.round((Date.now()-quizStartTime)/1000));
+  let sc = 0;
+  questions.forEach((q,i)=>{
+    if(isAnswerCorrect(q, answers[i]) === true) sc += 1;
+  });
+  const essayPts = (essayResult && typeof essayResult.total === 'number') ? essayResult.total : 0;
+  const grandTotal = scoredTotal + essayMaxPoints;
+  const combined = sc + essayPts;
+  const pct = Math.round((combined/grandTotal)*100);
+  submitScore(combined, grandTotal, elapsedSeconds);
+  document.getElementById('scoreRing').style.setProperty('--pct', pct);
+  document.getElementById('scoreNum').textContent = combined;
+  document.getElementById('scoreTotalLbl').textContent = grandTotal;
+  let note = '';
+  if(pct>=85) note = 'ملاحظة: نتيجة ممتازة! إتقان واضح للنّص والقواعد.';
+  else if(pct>=65) note = 'ملاحظة: نتيجة جيّدة، راجع بعض النّقاط مع الأستاذ لتتقن أكثر.';
+  else if(pct>=45) note = 'ملاحظة: نتيجة مقبولة، تحتاج إلى مراجعة إضافية مع الأستاذ.';
+  else note = 'ملاحظة: راجع النّص والقواعد جيّدا مع الأستاذ ثمّ أعد المحاولة.';
+  document.getElementById('resultMsg').textContent = `الأسئلة: ${sc}/${scoredTotal} — التّعبير الكتابي: ${essayResult && essayResult.total!==null ? essayPts : '—'}/${essayMaxPoints}. ` + note + ' اضغط الزّر أدناه لطباعة أو تحميل ورقة إجاباتك.';
+
+  const box = document.getElementById('essayResultBox');
+  if(essayResult){
+    let critHtml = '';
+    if(essayResult.criteria && essayResult.criteria.length){
+      critHtml = '<ul>' + essayResult.criteria.map(c => `<li>${escapeHtml(c.name)}: <b>${c.point}/1</b> — ${escapeHtml(c.note||'')}</li>`).join('') + '</ul>';
+    }
+    box.innerHTML = `<b>التّعبير الكتابي (${essayResult.total!==null ? essayResult.total : '—'}/${essayMaxPoints})</b>${critHtml}<div style="margin-top:8px;">${escapeHtml(essayResult.feedback||'')}</div>`;
+    box.style.display = 'block';
+  } else {
+    box.style.display = 'none';
+  }
+  showScreen('screenResult');
+}
+
+/* ---------------- essay upload & AI grading ---------------- */
+function onEssayFileSelected(event){
+  const file = event.target.files && event.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    const result = reader.result; // data:<mime>;base64,<data>
+    const base64 = result.split(',')[1];
+    essayImageData = { base64, mimeType: file.type || 'image/jpeg' };
+    const preview = document.getElementById('essayPreview');
+    preview.src = result;
+    preview.style.display = 'block';
+    document.getElementById('essayUploadLabel').textContent = '✅ تمّ إرفاق الصّورة، يمكنك تغييرها بالضّغط هنا';
+    document.getElementById('essaySubmitBtn').disabled = false;
+    document.getElementById('essayHint').textContent = 'اضغط "تثبيت وإنهاء الاختبار" لتصحيح النّشاط آليّا';
+  };
+  reader.readAsDataURL(file);
+}
+
+function skipEssay(){
+  essayImageData = null;
+  essayResult = { total: 0, criteria: [], feedback: 'لم يتمّ إرفاق صورة للنّشاط الكتابي، لذا لم يُحتسب له نقاط.' };
+  finishQuiz();
+}
+
+async function gradeEssay(imageData){
+  const prompt = `أنت أستاذ لغة عربية تصحّح نشاطا كتابيا لتلميذ في السّنة الثّانية متوسّط.
+التّعليمة المعطاة للتّلميذ: "${essayInstructionText}"
+معايير التّصحيح (كلّ معيار نقطة واحدة من 4 نقاط):
+1. ملاءمة المضمون لموضوع الطّموح والإصرار وتجاوز الصّعوبات كما ورد في التّعليمة.
+2. احترام الطّول التّقريبي المطلوب (فقرة تقارب عشرة أسطر).
+3. احترام علامات الوقف المناسبة (نقطة، فاصلة، علامة تعجّب أو استفهام عند الحاجة).
+4. سلامة اللّغة وتوظيف مكتسبات مناسبة للموضوع (روابط، تراكيب سليمة، ألفاظ ملائمة).
+افحص صورة النّصّ المكتوب بخطّ اليد المرفقة، وأعطِ لكلّ معيار 0 أو 1 مع ملاحظة قصيرة، ثمّ اجمعها في total، مع ملاحظة عامّة تشجيعيّة قصيرة.
+أجب فقط بصيغة JSON صِرفة بدون أيّ نصّ إضافي وبدون علامات markdown، بالضّبط بهذا الشّكل:
+{"criteria":[{"name":"ملاءمة المضمون","point":0,"note":"..."},{"name":"احترام الطّول","point":0,"note":"..."},{"name":"علامات الوقف","point":0,"note":"..."},{"name":"سلامة اللّغة","point":0,"note":"..."}],"total":0,"feedback":"..."}`;
+
+  const response = await fetch(GRADE_ESSAY_ENDPOINT, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      prompt: prompt,
+      imageBase64: imageData.base64,
+      mimeType: imageData.mimeType
+    })
+  });
+  if(!response.ok){
+    const errBody = await response.text().catch(()=> '');
+    throw new Error('server_error: ' + response.status + ' ' + errBody);
+  }
+  const parsed = await response.json();
+  if(typeof parsed.total !== 'number') throw new Error('invalid response');
+  return parsed;
+}
+
+async function submitEssay(){
+  if(!essayImageData) return;
+  document.getElementById('essayUploadWrap').style.display = 'none';
+  document.getElementById('essayLoading').style.display = 'flex';
+  document.getElementById('essaySubmitBtn').disabled = true;
+  document.querySelector('#screenEssay .footer-row').style.opacity = '.5';
+  try{
+    essayResult = await gradeEssay(essayImageData);
+  }catch(err){
+    essayResult = { total: null, criteria: [], feedback: 'تعذّر التّصحيح الآلي لهذا النّشاط (قد يكون الخادم غير متاح مؤقّتا أو انقطع الاتصال)؛ يُرجى عرض الورقة مباشرة على الأستاذ ليصحّحها يدويّا.' };
+  }
+  finishQuiz();
+}
+
+/* ---------------- shared leaderboard (Firebase) ---------------- */
+function formatTime(sec){
+  const m = Math.floor(sec/60), s = sec%60;
+  return m>0 ? (m+':'+String(s).padStart(2,'0')) : (s+' ثا');
+}
+
+async function submitScore(sc, total, timeSec){
+  if(!window.fbSubmitScore) return;
+  try{
+    await window.fbSubmitScore(studentName, sc, total, timeSec);
+  }catch(e){
+    console.error('تعذّر إرسال النّتيجة إلى لوحة الترتيب:', e);
+  }
+}
+
+function openLeaderboardModal(){
+  document.getElementById('leaderboardModalOverlay').classList.add('active');
+  document.getElementById('leaderboardBody').innerHTML = '<div class="lb-loading">جارٍ التحميل...</div>';
+  if(!window.fbListenLeaderboard){
+    document.getElementById('leaderboardBody').innerHTML = '<div class="lb-empty">لوحة الترتيب غير متوفّرة حاليًا.</div>';
+    return;
+  }
+  window.fbListenLeaderboard(function(entries){
+    if(entries===null){
+      document.getElementById('leaderboardBody').innerHTML = '<div class="lb-empty">تعذّر الاتّصال بلوحة الترتيب.</div>';
+      return;
+    }
+    renderLeaderboard(entries);
+  });
+}
+
+function closeLeaderboardModal(){
+  document.getElementById('leaderboardModalOverlay').classList.remove('active');
+  if(window.fbStopListening) window.fbStopListening();
+}
+
+function renderLeaderboard(entries){
+  const body = document.getElementById('leaderboardBody');
+  if(!entries.length){
+    body.innerHTML = '<div class="lb-empty">لا توجد نتائج بعد. كن أوّل من يُنهي الاختبار!</div>';
+    return;
+  }
+  let html = '<table class="lb-table"><tbody>';
+  const medals = ['🥇','🥈','🥉'];
+  entries.forEach((e,i)=>{
+    const rank = medals[i] || (i+1);
+    const rankClass = i<3 ? ' rank-'+(i+1) : '';
+    const isMe = (e.name===studentName) ? ' lb-me' : '';
+    const rowClass = (rankClass || isMe) ? ` class="${(rankClass+' '+isMe).trim()}"` : '';
+    html += `<tr${rowClass}><td class="lb-rank">${rank}</td><td>${escapeHtml(e.name)}</td><td>${e.score}/${e.total}</td><td>${formatTime(e.timeSec)}</td></tr>`;
+  });
+  html += '</tbody></table>';
+  body.innerHTML = html;
+}
+
+function escapeHtml(s){
+  const d = document.createElement('div');
+  d.textContent = s == null ? '' : s;
+  return d.innerHTML;
+}
+
+function buildSheetList(){
+  const circles = ['①','②','③','④'];
+  let html = '';
+  questions.forEach((q,i)=>{
+    const a = answers[i];
+    let answerText;
+    if(q.type === 'text'){
+      answerText = a && a.text ? escapeHtml(a.text) : null;
+    } else {
+      answerText = (a && a.selected !== undefined && q.o[a.selected] !== undefined)
+        ? `${circles[a.selected]} ${escapeHtml(q.o[a.selected])}`
+        : null;
+    }
+    const res = isAnswerCorrect(q, a);
+    html += `<div class="sheet-item">
+      <div class="sheet-q"><span>${i+1}</span>${escapeHtml(q.q)}</div>
+      <div class="sheet-a"><b>إجابتي:</b> <span class="sheet-a-text${answerText ? '' : ' empty'}">${answerText || 'بدون إجابة'}</span><span class="sheet-a-point ${res ? 'ok' : 'bad'}">${res ? '1' : '0'}</span></div>
+    </div>`;
+  });
+  // essay (writing task) item
+  const essayImgHtml = essayImageData ? `<div style="margin:6px 0;"><img src="data:${essayImageData.mimeType};base64,${essayImageData.base64}" style="max-width:220px;max-height:220px;border:1px solid #999;border-radius:6px;"></div>` : '';
+  const essayPts = (essayResult && typeof essayResult.total === 'number') ? essayResult.total : null;
+  const essayNote = essayResult ? escapeHtml(essayResult.feedback || '') : '';
+  html += `<div class="sheet-item">
+    <div class="sheet-q"><span>30</span>${escapeHtml(essayInstructionText)}</div>
+    ${essayImgHtml}
+    <div class="sheet-a"><b>ملاحظة التّصحيح:</b> <span class="sheet-a-text${essayNote ? '' : ' empty'}">${essayNote || '—'}</span><span class="sheet-a-point ${essayPts ? 'ok' : 'bad'}">${essayPts !== null ? essayPts : '—'}/4</span></div>
+  </div>`;
+  return html;
+}
+
+function openAnswerSheet(){
+  document.getElementById('sheetName').textContent = studentName;
+  let correctCount = 0;
+  questions.forEach((q,i)=>{
+    if(isAnswerCorrect(q, answers[i]) === true) correctCount += 1;
+  });
+  const essayPts = (essayResult && typeof essayResult.total === 'number') ? essayResult.total : 0;
+  document.getElementById('sheetGrade').textContent = correctCount + essayPts;
+  document.getElementById('sheetList').innerHTML = buildSheetList();
+  showScreen('screenSheet');
+}
+
+function restartQuiz(){
+  document.getElementById('nameInput').value = '';
+  document.getElementById('nameErr').textContent = '';
+  showScreen('screenStart');
+}
+</script>
+
+<!-- Firebase (وحدة منفصلة تُهيّئ الاتّصال بقاعدة البيانات) -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import {
+    getFirestore, collection, addDoc, query, where, limit, getDocs, orderBy, onSnapshot
+  } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyB4aL06ycFROyBoGSnnuECVPXiHWGcB-1M",
+    authDomain: "quiz-4am.firebaseapp.com",
+    projectId: "quiz-4am",
+    storageBucket: "quiz-4am.firebasestorage.app",
+    messagingSenderId: "1081891522054",
+    appId: "1:1081891522054:web:10977a13e6829be63d6587"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  const leaderboardCol = collection(db, "leaderboard_2am");
+
+  let unsubscribe = null;
+
+  function makeNameKey(name){
+    return String(name).trim().toLowerCase().replace(/\s+/g,' ');
+  }
+
+  window.fbSubmitScore = async function(name, score, total, timeSec){
+    await addDoc(leaderboardCol, {
+      name: String(name),
+      nameKey: makeNameKey(name),
+      score: Number(score),
+      total: Number(total),
+      timeSec: Number(timeSec),
+      ts: Date.now()
+    });
+  };
+
+  window.fbListenLeaderboard = function(callback){
+    if(unsubscribe){ unsubscribe(); unsubscribe = null; }
+    const q = query(leaderboardCol, orderBy('score','desc'));
+    unsubscribe = onSnapshot(q, (snap)=>{
+      const entries = [];
+      snap.forEach(d => entries.push(d.data()));
+      entries.sort((a,b)=> (b.score-a.score) || (a.timeSec-b.timeSec));
+      callback(entries);
+    }, (err)=>{
+      console.error('Firebase listen error:', err);
+      callback(null);
+    });
+  };
+
+  window.fbStopListening = function(){
+    if(unsubscribe){ unsubscribe(); unsubscribe = null; }
+  };
+</script>
+</body>
+</html>
